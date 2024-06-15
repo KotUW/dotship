@@ -1,0 +1,12 @@
+
+== DotMan!
+
+* files-DB
+It uses TOML as a place to track list of files to keep track of.
+* lockfile
+probably just text-files.
+
+=== Cli Refrences
+
+* `Sync` ⮧
+It starts by getting other line one by one and check the real files against the lockfile. 
