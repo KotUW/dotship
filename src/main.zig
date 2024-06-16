@@ -1,4 +1,6 @@
 const std = @import("std");
+//TODO Make it follow xdg conventions.
+const configDir = "/home/evil/work/proj/dotman/config"; //Needs to be absolute
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
@@ -17,6 +19,11 @@ pub fn main() !void {
     }
 
     if (std.zig.c_builtins.__builtin_strcmp(sub_cmd.?, "sync") == 0) {
-        std.debug.print("cmd = sync", .{});
+        std.debug.print("cmd = sync\n", .{});
+
+        std.fs.accessAbsolute(configDir, .{}) catch |err| {
+            std.debug.print("[ERROR] {!} Error returned trying to access {s}", .{ err, configDir });
+            try std.fs.makeDirAbsolute(configDir);
+        };
     }
 }
