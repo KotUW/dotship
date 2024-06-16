@@ -10,3 +10,7 @@ probably just text-files.
 
 * `Sync` ⮧
 It starts by getting other line one by one and check the real files against the lockfile. 
+
+=== History
+
+16-jan-24-03-28-00: Not using `zig` anymore as language does not have a string library and we have to create all the primitives ourselves.
