@@ -1,16 +1,29 @@
+= DotShip!
 
-== DotMan!
+It's a simple but effective dotfile manager. This project is my first time trying zig.
+So don't judge 😋.
 
+== Files
 * files-DB
-It uses TOML as a place to track list of files to keep track of.
+    It uses TOML as a place to track list of files to keep track of.
 * lockfile
-probably just text-files.
+    JSON file that keeps the time and hash of the files.
 
 === Cli Refrences
 
-* `Sync` ⮧
-It starts by getting other line one by one and check the real files against the lockfile. 
+* [ ] `sync` ⮧
+    It parses the lockfile, then parses the DB. and produces a list of task (dots to be updated). Then executes them.
+* [x] `init` ⮧
+    On a new Installation creates the directory and initilizes files.
+* [ ] `Add/Remove` ⮧
+    Provides an Interface to edit DB. If so wishes.
+* [ ] `Push/Git` ⮧
+    Git pushes changes to the repo. Automatically toggled with sync.
+* [ ] `gen-systemd` ⮧
+    Generates a systemd timer. So the script syncs weeakly withouth user input.
 
 === History
 
-16-jan-24-03-28-00: Not using `zig` anymore as language does not have a string library and we have to create all the primitives ourselves.
+16-jan-24-03-28-00:: Got frustated with using `zig` standard library. It's not mature enough.
+17-jan-24-01-30-38:: Finished the init function. Documentation on standard library is still lacking.
+                    Although, right now struggled with errors. Probably cause this is my first strict type language.
