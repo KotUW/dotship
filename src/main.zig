@@ -2,6 +2,8 @@ const std = @import("std");
 //TODO: Make a function to calculate the value. but it will need alloc and shit.
 const State = struct {
     pub const configDirPath = "/home/evil/work/proj/dotman/config";
+    pub const lockFileName = "lock.json";
+    pub const configFileName = "dotman.toml";
 };
 
 pub fn main() !void {
@@ -31,23 +33,39 @@ pub fn main() !void {
         std.debug.print("cmd = init\n", .{});
         try init();
     }
+
+    try stdout.writeAll("Bye.\n");
 }
 
 fn init() !void {
     const stdout = std.io.getStdOut().writer();
-    try stdout.print("Initlizing {s} dir as the config directory.", .{State.configDirPath});
+    try stdout.print("Initlizing \"{s}\" dir as the config directory.", .{State.configDirPath});
     try stdout.writeAll("\nWill Create Dir. Continue? (y/n) ");
-    switch (choice()) {
+    _ = switch (choice()) {
         'y' => {},
         'n' => return,
         else => return ChoiceError.Invalid,
-    }
-    std.fs.makeDirAbsolute(State.configDirPath) catch |err| switch (err) {
-        error.PathAlreadyExists => {},
-        else => unreachable,
     };
 
-    // const configD = try std.fs.openDirAbsolute(State.configDirPath, .{});
+    std.fs.makeDirAbsolute(State.configDirPath) catch |err| switch (err) {
+        error.PathAlreadyExists => {},
+        else => return err,
+    };
+
+    std.log.debug("Done with Directory", .{});
+
+    const configD = try std.fs.openDirAbsolute(State.configDirPath, .{});
+    const confFD = try configD.createFile(State.lockFileName, .{ .truncate = false });
+    defer confFD.close();
+    const lockFD = try configD.createFile(State.lockFileName, .{ .truncate = false });
+    defer lockFD.close();
+
+    //Checking if there is data in them.
+    const lsize = try lockFD.stat();
+    if (lsize.size == 0) try lockFD.writeAll("{}");
+
+    try stdout.writeAll("Project Initlized. Now you just need to find a way to sync it.\n Git is recomended. ");
+    //TODO[optional]: Maybe make a empty git repo.
 }
 
 const ChoiceError = error{
