@@ -6,6 +6,16 @@ const State = struct {
     pub const configFileName = "dotman.toml";
 };
 
+pub fn usage(p_name: []const u8) !void {
+    const stdout = std.io.getStdOut().writer();
+
+    try stdout.print("Usage: {s} <subcommand> [args]\n", .{p_name});
+    try stdout.writeAll("\nadd <file path>    : Adds a new file to track.\n");
+    try stdout.writeAll("sync                 : Fetches and updates all the fetched files.\n");
+    try stdout.writeAll("init                 : Initilizes the files and stores. Run this first.\n");
+    try stdout.writeAll("help                 : Shows this help.\n");
+}
+
 pub fn main() !void {
     const stdout = std.io.getStdOut().writer();
 
@@ -20,21 +30,44 @@ pub fn main() !void {
     const sub_cmd = args.next();
 
     if (sub_cmd == null) {
-        try stdout.print("[ERROR] Invalid Subcommand\nUsage: {s} Subcommand\n", .{prog_name});
+        try stdout.print("[ERROR] Invalid Subcommand\n", .{});
+        try usage(prog_name);
         return;
     }
 
     if (std.zig.c_builtins.__builtin_strcmp(sub_cmd.?, "sync") == 0) {
         std.debug.print("cmd = sync\n", .{});
-        // sync();
+        unreachable; // sync();
     }
 
+    if (std.zig.c_builtins.__builtin_strcmp(sub_cmd.?, "add") == 0) {
+        std.debug.print("cmd = add\n", .{});
+
+        const file_path = args.next();
+        if (file_path == null) {
+            std.log.err("Can't find file path. add expects an argument", .{});
+            try usage(prog_name);
+            return;
+        } else {
+            add(file_path.?);
+        }
+    }
     if (std.zig.c_builtins.__builtin_strcmp(sub_cmd.?, "init") == 0) {
         std.debug.print("cmd = init\n", .{});
         try init();
     }
 
+    if (std.zig.c_builtins.__builtin_strcmp(sub_cmd.?, "help") == 0) {
+        std.debug.print("cmd = help\n", .{});
+        try usage(prog_name);
+    }
+
     try stdout.writeAll("Bye.\n");
+}
+
+fn add(file_path: []const u8) void {
+    _ = file_path;
+    return;
 }
 
 fn init() !void {

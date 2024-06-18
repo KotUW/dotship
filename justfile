@@ -4,6 +4,8 @@ sync:
     zig build run -- sync
 debug:
     zig build -freference-trace
+build:
+    zig build --release=fast --summary new
 
 clean:
     rm -fdr config
