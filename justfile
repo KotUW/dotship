@@ -1,4 +1,6 @@
-init:
+add:
+    zig build run -- add
+init: clean
     zig build run -- init
 sync:
     zig build run -- sync
