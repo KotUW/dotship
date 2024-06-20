@@ -8,6 +8,8 @@ So don't judge 😋.
     It uses TOML as a place to track list of files to keep track of.
 * lockfile
     JSON file that keeps the time and hash of the files.
+* files/
+    folder containing the files. They are named (there path but . instead of /)
 
 === Cli Refrences
 
@@ -15,6 +17,8 @@ So don't judge 😋.
     It parses the lockfile, then parses the DB. and produces a list of task (dots to be updated). Then executes them.
 * [x] `init` ⮧
     On a new Installation creates the directory and initilizes files.
+* [x] `help` ⮧
+    Usage info!
 * [ ] `Add/Remove` ⮧
     Provides an Interface to edit DB. If so wishes.
 * [ ] `Push/Git` ⮧
@@ -24,6 +28,7 @@ So don't judge 😋.
 
 === History
 
-16-jan-24-03-28-00:: Got frustated with using `zig` standard library. It's not mature enough.
-17-jan-24-01-30-38:: Finished the init function. Documentation on standard library is still lacking.
+16-jun-24-03-28-00:: Got frustated with using `zig` standard library. It's not mature enough.
+17-jun-24-01-30-38:: Finished the init function. Documentation on standard library is still lacking.
                     Although, right now struggled with errors. Probably cause this is my first strict type language.
+18-jun-24-10-15-15:: Started work on add. Just finnished refactoring to add usage info()!
