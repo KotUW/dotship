@@ -1,13 +1,9 @@
-add:
-    zig build run -- add
-init: clean
-    zig build run -- init
-sync:
-    zig build run -- sync
+run: clean
+    zig build run
 debug:
     zig build -freference-trace
 build:
-    zig build --release=fast --summary new
+    zig build --release=safe --summary new
 
 clean:
     rm -fdr config
