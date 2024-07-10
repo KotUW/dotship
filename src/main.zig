@@ -11,9 +11,9 @@ pub fn usage(p_name: []const u8) !void {
 
     try stdout.print("Usage: {s} <subcommand> [args]\n", .{p_name});
     try stdout.writeAll("\nadd <file path>    : Adds a new file to track.\n");
-    try stdout.writeAll("sync                 : Fetches and updates all the fetched files.\n");
-    try stdout.writeAll("init                 : Initilizes the files and stores. Run this first.\n");
-    try stdout.writeAll("help                 : Shows this help.\n");
+    try stdout.writeAll("sync               : Fetches and updates all the fetched files.\n");
+    try stdout.writeAll("init               : Initilizes the files and stores. Run this first.\n");
+    try stdout.writeAll("help               : Shows this help.\n");
 }
 
 pub fn main() !void {
@@ -72,7 +72,9 @@ fn add(file_path: []const u8) void {
 
 fn init() !void {
     const stdout = std.io.getStdOut().writer();
-    try stdout.print("Initlizing \"{s}\" dir as the config directory.", .{State.configDirPath});
+    try stdout.print("Initlizing \"{s}\" dir as the config directory.",
+        .{State.configDirPath},
+    );
     try stdout.writeAll("\nWill Create Dir. Continue? (y/n) ");
     _ = switch (choice()) {
         'y' => {},
@@ -112,6 +114,19 @@ fn choice() u8 {
     const ans = stdin.readBytesNoEof(2) catch unreachable;
     return ans[0];
 }
+
+///get basename from a file path.
+fn get_basename(buf: []* u8, string: []const u8) *[]u8{
+    buf = "";
+    var len = 0;
+    for (string.len..0) |c| {
+        if (c == '/') break;
+        buf[len] = c;
+        len = len + 1;
+    }
+    buf[len] = '\n';
+    return buf;
+ }
 
 // fn sync() void {
 
