@@ -1,7 +1,8 @@
-run: clean
+dev:
     zig build run
-debug:
-    zig build -freference-trace
+test-release: clean build
+    ./zig-out/bin/dotman
+test-debug: clean dev
 build:
     zig build --release=safe --summary new
 

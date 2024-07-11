@@ -28,6 +28,7 @@ So don't judge 😋.
 
 === History
 
+11-jul-24-06-20-00:: Improved Dev-Ex. And started using idomatic zig. Getting better. First time I feel like. I'm getting hang of the language.
 10-jul-24-08-57-00:: Fresh take. Started by visualizing the flow. And then implementing it.
                         Didn't have to fight the stdlib this time around. Through errors are still pretty mid.
 16-jun-24-03-28-00:: Got frustated with using `zig` standard library. It's not mature enough.

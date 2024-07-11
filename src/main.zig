@@ -25,10 +25,12 @@ pub fn main() !void {
         }
     }
 
+    std.log.debug("Using {s} as the configuration directory", .{configDirPath});
+
     const configDir = std.fs.openDirAbsolute(configDirPath, .{ .iterate = true }) catch |err| cd: {
         if (err == error.FileNotFound) {
             //If Directory not found create it.
-            const prompt = try std.fmt.allocPrint(allocator, "Can't find dir {s}. Want me to create it?(y/N) ", .{configDirPath});
+            const prompt = try std.fmt.allocPrint(allocator, "Can't find dir {s} Want me to create it? [y/N] ", .{configDirPath});
             defer allocator.free(prompt);
             _ = switch (choice(prompt)) {
                 'y' => {},
@@ -37,7 +39,7 @@ pub fn main() !void {
             };
 
             try std.fs.makeDirAbsolute(configDirPath);
-            break :cd try std.fs.openDirAbsolute(configDirPath, .{});
+            break :cd try std.fs.openDirAbsolute(configDirPath, .{ .iterate = true });
         } else {
             return err;
         }
@@ -53,15 +55,12 @@ pub fn main() !void {
 
     var cdIter = configDir.iterate();
     while (try cdIter.next()) |entry| {
-        // std.log.debug("Iterating throigh entry => {s} of kind => {any}", .{ entry.name, entry.kind });
+        // std.log.debug("Iterating through entry => {s} of kind => {any}", .{ entry.name, entry.kind });
         if (entry.kind == .file) {
             const entryInfo = try configDir.statFile(entry.name);
             try dirListing.append(File{ .name = entry.name, .lastMod = entryInfo.mtime, .path = "default" });
         }
     }
-
-    // const debug_var = dirListing.getLast();
-    // std.log.debug("One of the dirListing entry [ name => {s}, mod => {d}, path => {s} ]", .{ debug_var.name, debug_var.lastMod, debug_var.path });
 
     const lfcont = try lockFile.readToEndAlloc(allocator, 1024); //TODO: For now. We will assume we read it in one go.
     defer allocator.free(lfcont);
