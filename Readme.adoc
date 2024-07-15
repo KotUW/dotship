@@ -12,11 +12,11 @@ Note: If going for hidden dir is the destination (i.e. `.config/...`) you can wr
 
 === Cli Refrences
 
-* [ ] `sync` ⮧
+* [x] `sync` ⮧
     Defaults, parses the config dir (Created if didn't exist) and scans the directory for files and sym links them.
 * [ ] `help` ⮧
     Usage info!
-* [ ] `Add/Remove` ⮧
+* [-] `Add/Remove` ⮧
     Provides an Interface to add files given a path. It copies it into the format into the config directory and deletes from the source. and then maybe symlinks.
 * [ ] `Push/Git` ⮧
     Git pushes changes to the repo. Automatically toggled with sync.
