@@ -3,24 +3,21 @@
 It's a simple but effective dotfile manager. This project is my first time trying zig.
 So don't judge 😋.
 
-== Files
-* files-DB
-    It uses TOML as a place to track list of files to keep track of.
-* lockfile
-    JSON file that keeps the time and hash of the files.
-* files/
-    folder containing the files. They are named (there path but . instead of /)
+== What?
+
+It stores your dotfiles in `folder1.folder2.filename.ext` format where the root is `~` of the user.
+So above will be converted `/home/<user>/folder1/folder2/filename.ext`.
+
+Note: If going for hidden dir is the destination (i.e. `.config/...`) you can write (`=config/...`) so that they are non-hidden
 
 === Cli Refrences
 
 * [ ] `sync` ⮧
-    It parses the lockfile, then parses the DB. and produces a list of task (dots to be updated). Then executes them.
-* [x] `init` ⮧
-    On a new Installation creates the directory and initilizes files.
-* [x] `help` ⮧
+    Defaults, parses the config dir (Created if didn't exist) and scans the directory for files and sym links them.
+* [ ] `help` ⮧
     Usage info!
 * [ ] `Add/Remove` ⮧
-    Provides an Interface to edit DB. If so wishes.
+    Provides an Interface to add files given a path. It copies it into the format into the config directory and deletes from the source. and then maybe symlinks.
 * [ ] `Push/Git` ⮧
     Git pushes changes to the repo. Automatically toggled with sync.
 * [ ] `gen-systemd` ⮧
@@ -28,6 +25,7 @@ So don't judge 😋.
 
 === History
 
+15-jul-24-02-09-20:: Started python implentation to beeter think anout stuff and pirorties.
 11-jul-24-06-20-00:: Improved Dev-Ex. And started using idomatic zig. Getting better. First time I feel like. I'm getting hang of the language.
 10-jul-24-08-57-00:: Fresh take. Started by visualizing the flow. And then implementing it.
                         Didn't have to fight the stdlib this time around. Through errors are still pretty mid.
