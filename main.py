@@ -4,7 +4,7 @@ import os
 import re
 import logging as log
 from typing import List
-from pathlib import Path
+from pathlib import Path, PurePath
 
 def get_config_dir_name()-> str:
     try:
@@ -28,7 +28,7 @@ def makedir(PATH: str):
     if (os.path.exists(PATH)):
         log.debug(f"Found the config dir at: '{PATH}'")
     else:
-        choice = (input(f"Couldn't find config path at {PATH}\n Want me to create it? [y/N] "))
+        choice = (input(f"Couldn't find path at {PATH}\n Want me to create it? [y/N] "))
         match choice:
             case 'y' | 'Y':
                 os.makedirs(PATH) #Make dirs recursive
@@ -49,29 +49,20 @@ def decode_file_path(name:  str)-> str:
 
 def link_files(file_list: List[str], CONFIG_DIR: str, forced=False):
     file_paths = [decode_file_path(files_path) for files_path in file_list]
-    home = str(Path.home())
     for index, file_path in enumerate(file_paths):
-        file_dst = home+'/'+file_path
+        file_dst = Path(Path.home(), file_path)
+        if file_dst.exists():
+            log.warning(f"File exist in destination {file_dst}")
+            if file_dst.is_symlink() and file_dst.readlink().name == file_list[index]:
+                print(f"File: {file_dst} already linked correctly!")
+                continue
+            elif forced:
+                file_dst.unlink() #Deletes the file or the symlink
+        #Check if parent dir exists dir and if not create it.
+        file_dst.parent.mkdir(parents=True, exist_ok=True) #Only fails if the directiry is a file on os.
         file_src = CONFIG_DIR+"/"+file_list[index]
-        try:
-            os.symlink(file_src, file_dst)
-            log.info(f"Symlinked file {file_dst} <- {file_src}")
-        except FileExistsError:
-            #check if file is symlinked correctly.
-            fd = Path(file_dst)
-            if fd.is_symlink():
-                if fd.readlink().name == file_list[index]:
-                    log.info(f"File {file_dst} is symlinked correctly")
-                    continue
-                else:
-                    log.error("File is symlinked incorrectly")
-            if forced:
-                #Remove it! Not sure about this!! Will it deleete the file or the directory containg it.
-                # fd.rmdir()
-                #try again
-                os.symlink(file_src, file_dst)
-                log.info(f"Symlinked file {file_dst} <- {file_src}")
-            log.error(f"File exist in destination {file_dst}")
+        file_dst.symlink_to(file_src)
+        print(f" File {file_dst} succesfully Created. ")
 
 def encode_file_path(fp: str)-> str:
     fp = re.sub(r'^/', '', fp)
