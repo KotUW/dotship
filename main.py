@@ -55,6 +55,7 @@ def link_files(file_list: List[str], CONFIG_DIR: str, forced=False):
             log.warning(f"File exist in destination {file_dst}")
             if file_dst.is_symlink() and file_dst.readlink().name == file_list[index]:
                 print(f"File: {file_dst} already linked correctly!")
+                log.debug(f"File {file_dst} is linked to {file_dst.readlink()}")
                 continue
             elif forced:
                 file_dst.unlink() #Deletes the file or the symlink
@@ -100,5 +101,6 @@ def main():
 
 
 if __name__ == "__main__":
+    # log.basicConfig(level = log.DEBUG)
     log.basicConfig()
     main()
