@@ -1,10 +1,9 @@
-from os.path import isdir
 import sys
 import os
 import re
 import logging as log
 from typing import List
-from pathlib import Path, PurePath
+from pathlib import Path
 
 
 def get_config_dir_name() -> str:
