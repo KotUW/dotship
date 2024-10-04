@@ -18,22 +18,9 @@ Note: If going for hidden dir is the destination (i.e. `.config/...`) you can wr
 
 * [x] `sync` ⮧
     Defaults, parses the config dir (Created if didn't exist) and scans the directory for files and sym links them.
-* [ ] `help` ⮧
+* [x] `help` ⮧
     Usage info!
 * [-] `Add/Remove` ⮧
     Provides an Interface to add files given a path. It copies it into the format into the config directory and deletes from the source. and then maybe symlinks.
 * [ ] `Push/Git` ⮧
     Git pushes changes to the repo. Automatically toggled with sync.
-* [ ] `gen-systemd` ⮧
-    Generates a systemd timer. So the script syncs weeakly withouth user input.
-
-=== History
-
-15-jul-24-02-09-20:: Started python implentation to beeter think anout stuff and pirorties.
-11-jul-24-06-20-00:: Improved Dev-Ex. And started using idomatic zig. Getting better. First time I feel like. I'm getting hang of the language.
-10-jul-24-08-57-00:: Fresh take. Started by visualizing the flow. And then implementing it.
-                        Didn't have to fight the stdlib this time around. Through errors are still pretty mid.
-16-jun-24-03-28-00:: Got frustated with using `zig` standard library. It's not mature enough.
-17-jun-24-01-30-38:: Finished the init function. Documentation on standard library is still lacking.
-                    Although, right now struggled with errors. Probably cause this is my first strict type language.
-18-jun-24-10-15-15:: Started work on add. Just finnished refactoring to add usage info()!
