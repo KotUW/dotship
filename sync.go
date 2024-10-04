@@ -47,28 +47,43 @@ func getAllFiles(cDir string) []string {
 
 // Decode file path
 func decodePath(pathStr string) string {
-	path := getConfDir()
+	path, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatal("[ERROR] Unable to get home dir", err)
+	}
 
 	tmp := strings.ReplaceAll(pathStr, "@", "/")
 	tmp = strings.ReplaceAll(tmp, "=", ".")
-	log.Info(tmp)
+	log.Debug("Decoded Path: ", tmp)
 
 	return path + "/" + tmp
 }
 
-// TODO: make it so force and custom dir can be set using env vars.
-func sync(path string) {
+// TODO: make it so force deletes all symlinks and re-creates them.
+func sync() {
 	//Get dirs
-	//path := getConfDir()
+	path := getConfDir()
 	//get list of files.
 	encFilePaths := getAllFiles(path)
 	//Decode paths
-	for i, encPath := range encFilePaths {
-		encFilePaths[i] = decodePath(encPath)
+	var decodedPAths []string
+	for _, encPath := range encFilePaths {
+		decodedPAths = append(decodedPAths, decodePath(encPath))
 	}
-	//symlinked them.
+
+	for i, newPath := range decodedPAths {
+		oldPath := path + "/" + encFilePaths[i]
+		err := os.Symlink(oldPath, newPath)
+		if err != nil {
+			//Handel file exist error
+			log.Fatal("Error when trying to symlink", err)
+		}
+
+		log.Infof("Symlinked to %s", newPath)
+	}
 }
 
 func main() {
-	sync("/home/evil/.config/home-manager/confiles")
+	sync()
+	//TODO: ADD
 }

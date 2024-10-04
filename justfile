@@ -1,5 +1,5 @@
 run: build
-    ./dotship
+    DOTSHIP_CONF=./test ./dotship
 
 build:
     go build
