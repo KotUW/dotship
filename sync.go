@@ -122,19 +122,6 @@ func add() {
 	}
 	log.Info("Created", "file", encPath)
 
-	// _, err := os.Stat(encPath)
-	// if os.IsNotExist(err) {
-	// 	file, err := os.Create(encPath)
-	// 	if err != nil {
-	// 		log.Fatal("Failed to create ", "file", err)
-	// 	}
-	// 	defer file.Close()
-
-	// 	log.Infof("Created new file at %s", encPath)
-	// } else if err != nil {
-	// 	log.Fatal("Accessing", "file", err)
-	// }
-
 }
 
 func main() {
@@ -143,7 +130,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	log.SetLevel(log.DebugLevel)
+	// log.SetLevel(log.DebugLevel)
 
 	switch os.Args[1] {
 	case "sync":
