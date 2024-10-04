@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"path"
 	"strings"
 
 	"github.com/charmbracelet/log"
@@ -61,6 +62,13 @@ func decodePath(pathStr string) string {
 	return tmp
 }
 
+func encodePath(plainPath string) string {
+	plainPath = strings.ReplaceAll(plainPath, "/", "@")
+	plainPath = strings.ReplaceAll(plainPath, ".", "=")
+
+	return plainPath
+}
+
 // TODO: make it so force deletes all symlinks and re-creates them.
 func sync() {
 	//Get dirs
@@ -79,7 +87,7 @@ func sync() {
 		if err != nil {
 			//Handel file exist error
 			if strings.Contains(err.Error(), "file exists") {
-				log.Infof("File %s already linked", newPath)
+				log.Infof("File %s already linked or Exists", newPath)
 				continue
 			}
 			log.Fatal("Error when trying to symlink", err.Error())
@@ -89,8 +97,63 @@ func sync() {
 	}
 }
 
+func add() {
+	if len(os.Args) < 3 {
+		log.Errorf("Usage: %s add [filepath]", os.Args[0])
+		os.Exit(1)
+	}
+
+	addPath := path.Clean(os.Args[2])
+	if !path.IsAbs(addPath) {
+		wd, err := os.Getwd()
+		if err != nil {
+			log.Fatal("Can't get Working Dir.", "err", err)
+		}
+		log.Debug("Detected Relative path")
+		addPath = path.Join(wd, addPath)
+	}
+	log.Debug("Resolved file path", "file", addPath)
+
+	encPath := path.Join(getConfDir(), encodePath(addPath))
+
+	err := os.Rename(addPath, encPath)
+	if err != nil {
+		log.Fatal("Failed to create file", "err", err)
+	}
+	log.Info("Created", "file", encPath)
+
+	// _, err := os.Stat(encPath)
+	// if os.IsNotExist(err) {
+	// 	file, err := os.Create(encPath)
+	// 	if err != nil {
+	// 		log.Fatal("Failed to create ", "file", err)
+	// 	}
+	// 	defer file.Close()
+
+	// 	log.Infof("Created new file at %s", encPath)
+	// } else if err != nil {
+	// 	log.Fatal("Accessing", "file", err)
+	// }
+
+}
+
 func main() {
+	if len(os.Args) < 2 {
+		log.Errorf("Usage: %s <add/sync> [filepath]", os.Args[0])
+		os.Exit(1)
+	}
+
 	log.SetLevel(log.DebugLevel)
-	sync()
-	//TODO: ADD
+
+	switch os.Args[1] {
+	case "sync":
+		sync()
+	case "add":
+		add()
+	default:
+		{
+			log.Fatal("Invalid sub-command. Only Add and Sync supported.", "cmd", os.Args[1])
+		}
+	}
+
 }

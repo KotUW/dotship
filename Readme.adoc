@@ -3,6 +3,10 @@
 It's a simple but effective dotfile manager. This project is my first time trying zig.
 So don't judge 😋.
 
+== Problems?!
+
+* What if the file name contains `@` or `=` chars. Which are right now not supported.
+
 == What?
 
 It stores your dotfiles in `folder1.folder2.filename.ext` format where the root is `~` of the user.
