@@ -36,7 +36,7 @@ func getAllFiles(cDir string) []string {
 	var files []string
 
 	for _, file := range entries {
-		log.Debug("File Found: %s", file.Name())
+		log.Debugf("File Found: %s", file.Name())
 		if file.IsDir() != true {
 			files = append(files, file.Name())
 		}
@@ -54,9 +54,11 @@ func decodePath(pathStr string) string {
 
 	tmp := strings.ReplaceAll(pathStr, "@", "/")
 	tmp = strings.ReplaceAll(tmp, "=", ".")
-	log.Debug("Decoded Path: ", tmp)
 
-	return path + "/" + tmp
+	tmp = path + "/" + tmp
+	log.Debug("Decoded", "Path", tmp)
+
+	return tmp
 }
 
 // TODO: make it so force deletes all symlinks and re-creates them.
@@ -76,7 +78,11 @@ func sync() {
 		err := os.Symlink(oldPath, newPath)
 		if err != nil {
 			//Handel file exist error
-			log.Fatal("Error when trying to symlink", err)
+			if strings.Contains(err.Error(), "file exists") {
+				log.Infof("File %s already linked", newPath)
+				continue
+			}
+			log.Fatal("Error when trying to symlink", err.Error())
 		}
 
 		log.Infof("Symlinked to %s", newPath)
@@ -84,6 +90,7 @@ func sync() {
 }
 
 func main() {
+	log.SetLevel(log.DebugLevel)
 	sync()
 	//TODO: ADD
 }
