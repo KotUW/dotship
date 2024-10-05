@@ -48,7 +48,7 @@ func getAllFiles(cDir string) []string {
 
 // Decode file path
 func decodePath(pathStr string) string {
-	path, err := os.UserHomeDir()
+	userHome, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatal("[ERROR] Unable to get home dir", err)
 	}
@@ -56,7 +56,7 @@ func decodePath(pathStr string) string {
 	tmp := strings.ReplaceAll(pathStr, "@", "/")
 	tmp = strings.ReplaceAll(tmp, "=", ".")
 
-	tmp = path + "/" + tmp
+	tmp = path.Join(userHome, tmp)
 	log.Debug("Decoded", "Path", tmp)
 
 	return tmp
@@ -90,7 +90,7 @@ func sync() {
 				log.Infof("File %s already linked or Exists", newPath)
 				continue
 			}
-			log.Fatal("Error when trying to symlink", err.Error())
+			log.Fatal("Error when trying to symlink", "err", err.Error())
 		}
 
 		log.Infof("Symlinked to %s", newPath)
@@ -112,11 +112,18 @@ func add() {
 		log.Debug("Detected Relative path")
 		addPath = path.Join(wd, addPath)
 	}
-	log.Debug("Resolved file path", "file", addPath)
+	home, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatal("While trying to get user home", "err", err)
+	}
 
-	encPath := path.Join(getConfDir(), encodePath(addPath))
+	//addpath contail the full path. but we only mesure from user's home.'
+	plainPath := strings.TrimPrefix(addPath, (home + "/"))
+	log.Debug("Resolved file path", "file", plainPath)
 
-	err := os.Rename(addPath, encPath)
+	encPath := path.Join(getConfDir(), encodePath(plainPath))
+
+	err = os.Rename(addPath, encPath)
 	if err != nil {
 		log.Fatal("Failed to create file", "err", err)
 	}
