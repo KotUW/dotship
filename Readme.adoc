@@ -5,22 +5,6 @@ So don't judge 😋.
 
 == Problems?!
 
-* What if the file name contains `@` or `=` chars. Which are right now not supported.
+== Solutions
 
-== What?
-
-It stores your dotfiles in `folder1.folder2.filename.ext` format where the root is `~` of the user.
-So above will be converted `/home/<user>/folder1/folder2/filename.ext`.
-
-Note: If going for hidden dir is the destination (i.e. `.config/...`) you can write (`=config/...`) so that they are non-hidden
-
-=== Cli Refrences
-
-* [x] `sync` ⮧
-    Defaults, parses the config dir (Created if didn't exist) and scans the directory for files and sym links them.
-* [x] `help` ⮧
-    Usage info!
-* [-] `Add/Remove` ⮧
-    Provides an Interface to add files given a path. It copies it into the format into the config directory and deletes from the source. and then maybe symlinks.
-* [ ] `Push/Git` ⮧
-    Git pushes changes to the repo. Automatically toggled with sync.
+Maybe overly complicating evrything. with file handeling. Just grab sqlite or something like zon or toml or josn something. Would be better. This is getting convulated and go is not a low-level language
